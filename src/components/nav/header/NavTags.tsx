@@ -10,10 +10,10 @@ const NavTags = () => {
         <div className="">
 
             <ul className="flex gap-6 items-center ">
-                <li className="hidden sm:inline-block text-slate-600 hover:underline font-semibold">
+                <li className="hidden sm:inline-block text-pink-800 hover:text-white  hover:underline font-semibold">
                     <Link to="/">Home</Link>
                 </li>
-                <li className="hidden sm:inline-block text-slate-600 hover:underline font-semibold">
+                <li className="hidden sm:inline-block text-pink-800 hover:text-white  hover:underline font-semibold">
                     <Link to="/about">About</Link>
                 </li>
                 <Link to="/profile">
@@ -24,7 +24,7 @@ const NavTags = () => {
                             alt="Profile Photo"
                         />
                     ) : (
-                        <li className="text-slate-600 hover:underline font-semibold">
+                        <li className=" hover:underline text-pink-800 hover:text-white font-semibold">
                             Login
                         </li>
                     )}
