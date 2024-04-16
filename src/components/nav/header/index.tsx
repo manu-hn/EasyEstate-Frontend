@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/redux/hooks/hooks.ts";
 import useMediaQuery from '@/utils/hooks/useMediaQuery.ts';
 import { FaSearch } from 'react-icons/fa';
 import NavTags from "./NavTags";
 import { FaBars } from "react-icons/fa6";
-import { RxCross2 } from "react-icons/rx";
 import MobileNavBar from "./MobileNavBar";
+import { onAuthStateChanged } from "firebase/auth";
+import { useAppDispatch } from "@/redux/hooks/hooks";
+import { auth } from "@/Firebase";
+import { loginSuccess, signOutUserSuccess } from "@/redux/slices/userSlice";
 
 
 const Header = () => {
@@ -15,7 +17,7 @@ const Header = () => {
   const isAboveMediumScreen = useMediaQuery('(min-width : 768px)');
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch = useAppDispatch();
 
   const handleHeaderFormSubmit = (e) => {
     e.preventDefault();
@@ -33,6 +35,9 @@ const Header = () => {
       setSearch(searchTermFromURL);
     }
   }, [location.search]);
+
+
+  
 
   return (
     <header className="bg-primary-300 w-full">
