@@ -18,7 +18,7 @@ const SignUp = () => {
     password: ""
   });
 
-  const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-white`
+  const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 bg-transparent text-white   placeholder:text-slate-500`
   // const errorStyle = `text-red-400 text-xs font-semibold mt-1`
 
   const handleSignUpFormDataChange = (e) => {
@@ -46,6 +46,7 @@ const SignUp = () => {
 
     } catch (error) {
       setIsLoading(false)
+      setMessage(error?.response?.data?.message)
       console.log(error);
 
     }
@@ -55,7 +56,7 @@ const SignUp = () => {
 
     <div className='p-3 max-w-lg mx-auto flex flex-col items-center '>
       <h1 className='font-semibold text-2xl text-center my-7'>Sign Up</h1>
-      <form className='flex flex-col gap-4 w-5/6 bg-black bg-opacity-55 px-4 py-6 rounded-lg' onSubmit={handleSignUpSubmit}>
+      <form className='flex flex-col gap-4 w-5/6 bg-slate-600  px-4 py-6 rounded-lg' onSubmit={handleSignUpSubmit}>
         <div className="flex flex-col ">
           <label className="mx-2 text-slate-200" htmlFor="fullName">Full Name : </label>
           <input onChange={handleSignUpFormDataChange} value={signUpData?.fullName}
@@ -90,7 +91,7 @@ const SignUp = () => {
         <div>
           <OAuth />
         </div>
-        <p className="text-sm text-violet-50 font-semibold">{message}</p>
+        <p className="text-sm text-violet-50 font-semibold">{message.split(':')[0]}</p>
       </form>
 
       <div className='flex gap-3 mt-6'>

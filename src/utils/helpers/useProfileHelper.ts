@@ -15,9 +15,11 @@ const useProfileHelper = () => {
 
 
     const optionsAPI = {
+        'Content-type': 'application/json', 
+        Authorization: `Bearer ${getCookie("token")}`,
         'Access-Control-Allow-Origin': 'http://localhost:5173',
-        Authorization: getCookie('token'),
-        'Content-type': 'application/json'
+       
+
     }
 
     const dispatch = useAppDispatch();
@@ -65,7 +67,7 @@ const useProfileHelper = () => {
             //    const res = await getAllListings(currentUser.uid);
             const response: AxiosResponse = await axios.get(`${import.meta.env.VITE_BASE_URL}api/properties/listings/get-listings/${currentUser?._id}`,
                 { headers: optionsAPI });
-            
+           
             setUserListings(response?.data?.listings);
             return response.data;
 
