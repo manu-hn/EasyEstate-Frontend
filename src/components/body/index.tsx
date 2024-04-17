@@ -9,7 +9,7 @@ import SignUp from "@/components/auth/SignUp";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import EditListing from "@/components/Listings/edit";
 import CreateListing from "@/components/Listings/create";
-
+import Listing from "@/components/Listings/listing";
 
 
 const Body = () => {
@@ -21,7 +21,7 @@ const Body = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-
+          <Route path='/listing/:id' element={<Listing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route element={<PrivateRoute />}>
