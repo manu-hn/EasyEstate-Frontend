@@ -24,8 +24,7 @@ const Listing = () => {
         const res = await fetchListingById(id);
         setListing(res?.singleListing);
         setError(res?.error);
-        console.log(res);
-        console.log(error);
+        setLoading(false)
     }
 
 

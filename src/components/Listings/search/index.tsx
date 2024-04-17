@@ -14,8 +14,8 @@ type SideBarData = {
   sort: string,
   order: string,
   locationType: string,
-  start: number,
-  limit: number,
+  start: number | string,
+  limit: number | string,
 }
 
 const SearchListings = () => {
@@ -33,8 +33,8 @@ const SearchListings = () => {
     sort: 'createdAt',
     order: 'desc',
     locationType: 'Commercial',
-    start: 0,
-    limit: 10
+    start: '0',
+    limit: '10'
   });
   const [showMore, setShowMore] = useState<boolean>(false);
 
@@ -153,7 +153,7 @@ const SearchListings = () => {
         sort: sortFromURL || 'createdAt',
         order: orderFromURL || 'desc',
         start: startFromURL || 0,
-        limit: limitFromURL || 10
+        limit: limitFromURL || '10'
       });
     }
 
@@ -203,7 +203,7 @@ const SearchListings = () => {
 
   const showMoreListings = async () => {
     const numberOfListings = listings?.length;
-    const start: number = numberOfListings;
+    const start : any = numberOfListings;
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("start", start);
     const searchQuery = urlParams.toString();

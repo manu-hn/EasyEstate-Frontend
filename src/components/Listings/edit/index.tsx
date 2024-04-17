@@ -3,14 +3,14 @@ import { useAppSelector } from "@/redux/hooks/hooks";
 import useCreateListings from "@/utils/hooks/useCreateListings";
 import useListings from "@/utils/hooks/useListings";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
 const EditListing = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<Array<File> >();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<boolean|string>(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -50,7 +50,7 @@ const EditListing = () => {
     fetchHandler(id);
   }, [])
 
-  const fetchHandler = async (lid) => {
+  const fetchHandler = async (lid: string) => {
     const res = await fetchListingById(lid);
     setFormData(res.singleListing);
 
@@ -58,12 +58,12 @@ const EditListing = () => {
   const handleImageSubmit = (e) => {
     e.preventDefault();
     try {
-      if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
+      if (files?.length > 0 && files?.length + formData.imageURLs.length < 7) {
         setUploading(true);
         setImageUploadFailure(false);
         const promises = [];
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files?.length; i++) {
           promises.push(storeImage(files[i]));
         }
         Promise.all(promises).then((urls) => {
@@ -73,17 +73,18 @@ const EditListing = () => {
         }).catch((error) => {
           setImageUploadFailure('Error Uploading, Image size cannot be more than 2MB');
           setUploading(false);
+          throw new Error(error.message)
         })
       } else {
         setImageUploadFailure(`You can't upload more than six image`)
       }
 
     } catch (error) {
-      console.log(error)
+      throw new Error(error.message)
     }
   }
 
-  const storeImage = async (file) => {
+  const storeImage = async (file: File) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
@@ -94,7 +95,7 @@ const EditListing = () => {
       uploadTask.on('state_changed',
         (snapshot) => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+          console.log(progress);
         },
 
         (error) => {
@@ -191,7 +192,7 @@ const EditListing = () => {
 
       setLoading(true);
       setError(false)
-      const response = await updateListingsFromHook({ ...formData, userRef: currentUser.uid }, id);
+      const response = await updateListingsFromHook({ ...formData, userRef: currentUser._id }, id);
 
       if (!response.error) {
         setLoading(false)
@@ -319,7 +320,7 @@ const EditListing = () => {
             <p className='font-semibold'>Images :</p>
             <span className='font-normal text-gray-700 ml-3'>The first image will be the cover (max 6)</span>
             <div className='flex gap-6'>
-              <input className='p-3 border border-gray-400 rounded w-full' onChange={(e) => setFiles(e.target.files)}
+              <input className='p-3 border border-gray-400 rounded w-full' onChange={(e : any) => setFiles(e.target.files)}
                 type="file" name="" id="images" accept='image/*' multiple />
               <button type='button' onClick={handleImageSubmit} disabled={uploading}
                 className='uppercase hover:shadow-lg disabled:opacity-80 rounded 

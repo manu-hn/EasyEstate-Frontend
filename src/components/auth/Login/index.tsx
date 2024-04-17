@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from "@/redux/hooks/hooks";
 import axios from "axios";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginFailure, loginInitiated, loginSuccess } from '@/redux/slices/userSlice.tsx';
 import OAuth from '@/components/auth/OAuth.tsx';
@@ -28,7 +28,7 @@ const Login = () => {
   const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 
   bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-slate-900`;
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = async (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginInitiated());
     try {
@@ -52,7 +52,7 @@ const Login = () => {
     }
   }
 
-  const handleDataChange = (e) => {
+  const handleDataChange = (e : ChangeEvent<HTMLInputElement>) => {
 
     setUserData({ ...userData, [e.target.id]: e.target.value });
   }

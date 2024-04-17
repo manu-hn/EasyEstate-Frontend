@@ -30,7 +30,7 @@ const useCreateListings = () => {
             const response = await axios.post(`${import.meta.env.VITE_BASE_URL}api/properties/listings/update/${lid}`, JSON.stringify(formData), config)
             return response.data;
         } catch (error) {
-            setErrorMessage(error?.message)
+            setErrorMessage('Error While Updating Listings')
             console.log(error)
         }
     }
