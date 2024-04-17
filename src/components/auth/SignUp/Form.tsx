@@ -11,7 +11,7 @@ type ErrorsType = {
 
 }
 
- const validate = (values) => {
+ const validate = (values : ErrorsType) => {
     const errors: ErrorsType = {
         fullName: "",
         username: '',
@@ -71,7 +71,7 @@ const Form = () => {
     });
 
 
-    const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-white`
+    const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-gray-300`
 
     // const errorStyle = `text-red-400 text-xs font-semibold mt-1`
     return (

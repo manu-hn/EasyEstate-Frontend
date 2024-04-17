@@ -5,10 +5,6 @@ import { FaSearch } from 'react-icons/fa';
 import NavTags from "./NavTags";
 import { FaBars } from "react-icons/fa6";
 import MobileNavBar from "./MobileNavBar";
-import { onAuthStateChanged } from "firebase/auth";
-import { useAppDispatch } from "@/redux/hooks/hooks";
-import { auth } from "@/Firebase";
-import { loginSuccess, signOutUserSuccess } from "@/redux/slices/userSlice";
 
 
 const Header = () => {
@@ -17,14 +13,14 @@ const Header = () => {
   const isAboveMediumScreen = useMediaQuery('(min-width : 768px)');
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const handleHeaderFormSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
     urlParams.set('search', search);
     const searchQuery = urlParams.toString();
-    navigate(`/fetch?${searchQuery}`);
+    navigate(`/display-all?${searchQuery}`);
   };
 
 

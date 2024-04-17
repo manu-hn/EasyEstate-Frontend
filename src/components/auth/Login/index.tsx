@@ -26,7 +26,7 @@ const Login = () => {
 
 
   const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 
-  bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-white`;
+  bg-black bg-opacity-25 text-white focus:bg-black focus:bg-opacity-55  placeholder:text-slate-900`;
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -60,7 +60,7 @@ const Login = () => {
   return (
     <div className="p-3 max-w-lg mx-auto h-screen ">
       <h1 className='font-semibold text-2xl text-center my-7'>Login</h1>
-      <form className='flex flex-col gap-4 bg-black bg-opacity-55 px-4 py-6 rounded-lg' onSubmit={handleLoginSubmit}>
+      <form className='flex flex-col gap-4 bg-slate-600 px-4 py-6 rounded-lg' onSubmit={handleLoginSubmit}>
         <div className="flex flex-col">
           <label className="mx-2 text-slate-200" htmlFor="email">Email : </label>
           <input value={userData?.email} onChange={handleDataChange} className={`rounded-lg outline-none border p-3 ${inputStyle}`} type="email" name="email" id="email" placeholder='example@email.com' />

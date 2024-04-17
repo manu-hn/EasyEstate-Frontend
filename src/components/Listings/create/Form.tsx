@@ -4,14 +4,14 @@ import useCreateListings from '@/utils/hooks/useCreateListings';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import { FormInputDataType } from '@/utils/types';
 
 
 const Form = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | boolean>(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormInputDataType>({
     title: "",
     description: "",
     address: {
