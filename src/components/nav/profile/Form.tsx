@@ -3,8 +3,8 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks/hooks';
 import { updateUserFailure, updateUserStart, updateUserSuccess } from '@/redux/slices/userSlice';
 import axios from 'axios';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-import { FormEvent, useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import {  FormEvent, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { getCookie } from 'typescript-cookie';
 
 
@@ -22,20 +22,19 @@ const Form = () => {
     mobile: currentUser?.mobile || '',
 
   });
-  // const [userListings, setUserListings] = useState([]);
-  // const [deleteListings, setDeleteListings] = useState([]);
-  const [file, setFile] = useState<FileList | null>();
+
+  const [file, setFile] = useState<File[]>();
 
   const [filePercentage, setFilePercentage] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const navigate = useNavigate();
+
   const fileRef = useRef(null);
 
   const dispatch = useAppDispatch();
 
 
   function handleFormDataChange(e: FormEvent<HTMLInputElement>) {
-    setFormData({ ...formData, [e.target?.id]: e.target?.value })
+    setFormData({ ...formData, [(e.target as HTMLInputElement).id]: (e.target as HTMLInputElement).value })
   }
   async function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -58,7 +57,7 @@ const Form = () => {
       dispatch(updateUserFailure(error))
     }
   }
-  console.log(formData)
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -79,7 +78,8 @@ const Form = () => {
       },
 
       (error) => {
-        setFileUploadError(true)
+        setFileUploadError(true);
+        throw new Error(error.message);
       },
       () => {
         getDownloadURL(uploadFile.snapshot.ref).then((downloadUrl) => {
@@ -90,10 +90,15 @@ const Form = () => {
 
   }
 
-  console.log(currentUser)
+  // const handleFileChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+
+  // }
+
   return (
     <form className='flex flex-col' onSubmit={handleFormSubmit} >
-      <input onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFile(e?.target?.files[0])} type="file" ref={fileRef} hidden accept='image/*' />
+      {/* <input onChange={(e: ChangeEvent<HTMLInputElement>) => setFile(e?.target?.files[0])} type="file" ref={fileRef} hidden accept='image/*' /> */}
+      <input onChange={(e: any) => setFile(e?.target?.files[0])} type="file" ref={fileRef} hidden accept='image/*' />
+      {/* <input onChange={handleFileChangeInput} type="file" ref={fileRef} hidden accept='image/*' /> */}
       <img onClick={() => fileRef?.current?.click()} className='h-28 w-28 rounded-full cursor-pointer object-cover self-center mt-4'
         src={formData?.avatar || currentUser?.avatar} alt="" />
       <p className='text-center text-xs'>
@@ -111,13 +116,14 @@ const Form = () => {
             )
         }
       </p>
-      <input value={formData?.fullName}  type="text" name="fullName" id='fullName' placeholder='Full Name' className={`${inputStyle}`} onChange={handleFormDataChange} />
-      <input value={formData?.username}  type="text" name="username" id='username' placeholder='Username' className={`${inputStyle}`} onChange={handleFormDataChange} />
-      <input value={formData?.email}     type="text" name="email" id='email' placeholder='email' className={`${inputStyle}`} onChange={handleFormDataChange} />
-      <input defaultValue={formData?.avatar}    type="text" name="mobile" id='mobile' placeholder='mobile' className={`${inputStyle}`} onChange={handleFormDataChange} />
+      <input value={formData?.fullName} type="text" name="fullName" id='fullName' placeholder='Full Name' className={`${inputStyle}`} onChange={handleFormDataChange} />
+      <input value={formData?.username} type="text" name="username" id='username' placeholder='Username' className={`${inputStyle}`} onChange={handleFormDataChange} />
+      <input value={formData?.email} type="text" name="email" id='email' placeholder='email' className={`${inputStyle}`} onChange={handleFormDataChange} />
+      <input defaultValue={formData?.avatar} type="text" name="mobile" id='mobile' placeholder='mobile' className={`${inputStyle}`} onChange={handleFormDataChange} />
       <input type="password" name="password" id='password' placeholder='password' className={`${inputStyle}`} onChange={handleFormDataChange} />
       <button disabled={loading} type='submit' className='bg-orange-600 uppercase my-2 py-2 rounded-lg text-white hover:opacity-90 disabled:opacity-60'>{loading ? "Updating" : "Update"}</button>
       <Link to={'/create-listing'} className='bg-blue-950 text-white uppercase rounded-lg text-center p-3 hover:opacity-95'>Create Listing</Link>
+      <p>{message}</p>
     </form>
   )
 }

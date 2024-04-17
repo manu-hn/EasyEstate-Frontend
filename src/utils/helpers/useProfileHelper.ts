@@ -15,10 +15,10 @@ const useProfileHelper = () => {
 
 
     const optionsAPI = {
-        'Content-type': 'application/json', 
+        'Content-type': 'application/json',
         Authorization: `Bearer ${getCookie("token")}`,
         'Access-Control-Allow-Origin': 'http://localhost:5173',
-       
+
 
     }
 
@@ -30,7 +30,7 @@ const useProfileHelper = () => {
         e.preventDefault();
         try {
             dispatch(deleteUserStart())
-            const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}api/easy-estates/user/delete/${currentUser?._id}`, {
+            await axios.delete(`${import.meta.env.VITE_BASE_URL}api/easy-estates/user/delete/${currentUser?._id}`, {
                 headers: optionsAPI
             });
 
@@ -67,7 +67,7 @@ const useProfileHelper = () => {
             //    const res = await getAllListings(currentUser.uid);
             const response: AxiosResponse = await axios.get(`${import.meta.env.VITE_BASE_URL}api/properties/listings/get-listings/${currentUser?._id}`,
                 { headers: optionsAPI });
-           
+
             setUserListings(response?.data?.listings);
             return response.data;
 

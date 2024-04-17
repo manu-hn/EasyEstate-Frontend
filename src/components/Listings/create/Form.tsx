@@ -2,13 +2,13 @@ import { app } from '@/Firebase';
 import { useAppSelector } from '@/redux/hooks/hooks';
 import useCreateListings from '@/utils/hooks/useCreateListings';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { useState } from 'react'
+import { ChangeEvent, FormEvent,  useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { FormInputDataType } from '@/utils/types';
+import { FormInputDataType, } from '@/utils/types';
 
 
 const Form = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<FileList | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | boolean>(false);
   const [formData, setFormData] = useState<FormInputDataType>({
@@ -42,64 +42,108 @@ const Form = () => {
   const [imageUploadFailure, setImageUploadFailure] = useState<string | boolean>(false);
   const { createListingsFromHook } = useCreateListings();
   const { currentUser } = useAppSelector((store => store.user))
-  console.log(formData)
 
 
-  const handleFormDataChange = (e) => {
+
+  // const handleFormDataChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+  //   if (e.target.id === 'sale' || e.target.id === 'rent') {
+  //     setFormData({ ...formData, type: e.target.id });
+  //   }
+
+  //   if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') {
+  //     setFormData({ ...formData, [e.target.id]: e.target.checked });
+  //   }
+
+  //   if (e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea') {
+  //     const idParts = e.target.id.split('.');
+  //     const topLevelProperty = idParts[0];
+
+  //     if (idParts.length === 1) {
+  //       // Handle top-level properties
+  //       setFormData({ ...formData, [topLevelProperty]: e.target.value });
+  //     } else {
+  //       // Handle nested properties
+  //       const updatedFormData = { ...formData };
+  //       let currentLevel: any = updatedFormData;
+
+  //       for (let i = 0; i < idParts.length - 1; i++) {
+  //         const currentPart: any = idParts[i];
+
+  //         if (!currentLevel[currentPart]) {
+  //           currentLevel[currentPart] = {};
+  //         }
+
+  //         currentLevel = currentLevel[currentPart];
+  //       }
+
+  //       currentLevel[idParts[idParts.length - 1]] = e.target.value;
+
+  //       setFormData(updatedFormData);
+  //     }
+  //   }
+  // };
+  
+  const handleFormDataChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.id === 'sale' || e.target.id === 'rent') {
       setFormData({ ...formData, type: e.target.id });
     }
-
+  
     if (e.target.id === 'parking' || e.target.id === 'furnished' || e.target.id === 'offer') {
-      setFormData({ ...formData, [e.target.id]: e.target.checked });
+      if ('checked' in e.target && e.target.type === 'checkbox') {
+        setFormData({ ...formData, [e.target.id]: e.target.checked });
+      }
     }
-
+  
     if (e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea') {
       const idParts = e.target.id.split('.');
       const topLevelProperty = idParts[0];
-
+  
       if (idParts.length === 1) {
         // Handle top-level properties
         setFormData({ ...formData, [topLevelProperty]: e.target.value });
       } else {
         // Handle nested properties
         const updatedFormData = { ...formData };
-        let currentLevel = updatedFormData;
-
+        let currentLevel: any = updatedFormData;
+  
         for (let i = 0; i < idParts.length - 1; i++) {
-          const currentPart = idParts[i];
-
+          const currentPart: any = idParts[i];
+  
           if (!currentLevel[currentPart]) {
             currentLevel[currentPart] = {};
           }
-
+  
           currentLevel = currentLevel[currentPart];
         }
-
+  
         currentLevel[idParts[idParts.length - 1]] = e.target.value;
-
+  
         setFormData(updatedFormData);
       }
     }
   };
-  const handleImageSubmit = (e) => {
-    e.preventDefault();
+  
+  
+  const handleImageSubmit = (e: FormEvent<HTMLFormElement> | any ) => {
+    e?.preventDefault();
     try {
-      if (files.length > 0 && files.length + formData.imageURLs.length < 7) {
+      
+      if (files?.length > 0 && files?.length + formData.imageURLs.length < 7) {
         setUploading(true);
         setImageUploadFailure(false);
         const promises = [];
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files?.length; i++) {
           promises.push(storeImage(files[i]));
         }
-        Promise.all(promises).then((urls) => {
+        Promise.all(promises).then((urls: any) => {
           setFormData({ ...formData, imageURLs: formData.imageURLs.concat(urls) });
           setImageUploadFailure(false);
           setUploading(false);
         }).catch((error) => {
           setImageUploadFailure('Error Uploading, Image size cannot be more than 2MB');
           setUploading(false);
+          throw new Error(error.message);
         })
       } else {
         setImageUploadFailure(`You can't upload more than six image`)
@@ -110,7 +154,7 @@ const Form = () => {
     }
   }
 
-  const storeImage = async (file) => {
+  const storeImage = async (file: File) => {
     return new Promise((resolve, reject) => {
       const storage = getStorage(app);
       const fileName = new Date().getTime() + file.name;
@@ -136,7 +180,7 @@ const Form = () => {
     })
   }
 
-  const handleLocationTypeChange = (e) => {
+  const handleLocationTypeChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = e.target;
 
     const idParts = id.split('.');
@@ -148,10 +192,10 @@ const Form = () => {
     } else {
       // Handle nested properties
       const updatedFormData = { ...formData };
-      let currentLevel = updatedFormData;
+      let currentLevel: any = updatedFormData;
 
       for (let i = 0; i < idParts.length - 1; i++) {
-        const currentPart = idParts[i];
+        const currentPart: any = idParts[i];
 
         if (!currentLevel[currentPart]) {
           currentLevel[currentPart] = {};
@@ -166,11 +210,11 @@ const Form = () => {
     }
   };
 
-  const handleRemoveImage = (index) => {
+  const handleRemoveImage = (index: number) => {
 
     setFormData({ ...formData, imageURLs: formData.imageURLs.filter((_, i) => i !== index), })
   }
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       if (formData.imageURLs.length < 1) return setError('You must upload at least one image');
@@ -178,7 +222,8 @@ const Form = () => {
 
       setLoading(true);
       setError(false)
-      const response = await createListingsFromHook({ ...formData, userRef: currentUser?._id });
+      const userRef = currentUser?._id || "";
+      const response = await createListingsFromHook({ ...formData, userRef });
       console.log(response)
       if (!response.error) {
         setLoading(false)
@@ -192,8 +237,10 @@ const Form = () => {
     }
   }
 
+
+
   return (
-    <form className='flex gap-4 flex-col sm:flex-row justify-center' >
+    <form className='flex gap-4 flex-col sm:flex-row justify-center' onSubmit={handleSubmit}>
       <div className='max-w-2xl flex flex-col gap-6 py-3'>
 
         <input type="text" placeholder='Title' className='border p-3 rounded-lg ' onChange={handleFormDataChange}
@@ -304,10 +351,10 @@ const Form = () => {
         <div className='flex flex-col flex-1 gap-4'>
           <p className='font-semibold'>Images :</p>
           <span className='font-normal text-gray-700 ml-3'>The first image will be the cover (max 6)</span>
-          <div className='flex gap-6'>
-            <input className='p-3 border border-gray-400 rounded w-full' onChange={(e) => setFiles(e?.target?.files)}
+          <div  className='flex gap-6'>
+            <input className='p-3 border border-gray-400 rounded w-full' onChange={(e: ChangeEvent<HTMLInputElement>) => setFiles(e?.target?.files)}
               type="file" name="" id="images" accept='image/*' multiple />
-            <button type='button' onClick={handleImageSubmit} disabled={uploading}
+            <button type='submit' onClick={handleImageSubmit}  disabled={uploading}
               className='uppercase hover:shadow-lg disabled:opacity-80 rounded 
                              text-sky-500 border px-4 py-2 border-sky-700'>{uploading ? "Uploading..." : "Upload"}</button>
           </div>
@@ -323,7 +370,7 @@ const Form = () => {
           }
         </div>
 
-        <button disabled={loading || uploading} onClick={handleSubmit} className='p-3 bg-slate-800 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80'>{loading ? "Creating List" : "Create Listing"}</button>
+        <button disabled={loading || uploading} type='submit' className='p-3 bg-slate-800 text-white rounded-lg uppercase hover:opacity-90 disabled:opacity-80'>{loading ? "Creating List" : "Create Listing"}</button>
         <p className='text-red-500 text-sm'> {error}</p>
 
       </div>

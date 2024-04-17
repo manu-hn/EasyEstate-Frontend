@@ -1,4 +1,3 @@
-import { SignUpData } from '@/utils/types';
 import { useFormik } from 'formik'
 
 

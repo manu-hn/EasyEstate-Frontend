@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SignUpData } from "@/utils/types";
 import axios from "axios";
@@ -21,12 +21,12 @@ const SignUp = () => {
   const inputStyle = `rounded-lg outline-none border border-gray-300 p-1 md:p-2 bg-transparent text-white   placeholder:text-slate-500`
   // const errorStyle = `text-red-400 text-xs font-semibold mt-1`
 
-  const handleSignUpFormDataChange = (e) => {
+  const handleSignUpFormDataChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSignUpData({ ...signUpData, [e.target.id]: e.target.value });
 
   }
 
-  async function handleSignUpSubmit(e) {
+  async function handleSignUpSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true)
     try {
@@ -46,7 +46,7 @@ const SignUp = () => {
 
     } catch (error) {
       setIsLoading(false)
-      setMessage(error?.response?.data?.message)
+      setMessage('Something Error Happened!')
       console.log(error);
 
     }
