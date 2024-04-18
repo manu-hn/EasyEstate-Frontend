@@ -173,8 +173,9 @@ const SearchListings = () => {
         setLoading(false);
       } catch (error) {
 
-        console.log(error);
-        setLoading(false)
+        
+        setLoading(false);
+        throw new Error(error.message);
       }
     }
 
@@ -183,7 +184,6 @@ const SearchListings = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log('hii')
     const urlParams = new URLSearchParams();
     urlParams.set('search', sideBarData?.search);
     urlParams.set('locationType', sideBarData?.locationType);
@@ -196,7 +196,7 @@ const SearchListings = () => {
     urlParams.set('start', '0');
     urlParams.set('limit', '10');
     const searchQuery = urlParams.toString();
-    console.log(searchQuery)
+ 
     navigate(`/display-all?${searchQuery}`);
   };
 
@@ -222,7 +222,7 @@ const SearchListings = () => {
         setShowMore(false);
       }
     } catch (error) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
   return (

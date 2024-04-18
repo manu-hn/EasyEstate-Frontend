@@ -20,7 +20,7 @@ const useCreateListings = () => {
             return response.data;
         } catch (error) {
             setErrorMessage(error?.message);
-            console.log(error)
+            throw new Error(error.message);
         }
     }
 
@@ -31,7 +31,7 @@ const useCreateListings = () => {
             return response.data;
         } catch (error) {
             setErrorMessage('Error While Updating Listings')
-            console.log(error)
+            throw new Error(error.message);
         }
     }
 

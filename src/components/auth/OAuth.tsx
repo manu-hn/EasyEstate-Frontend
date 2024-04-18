@@ -17,7 +17,7 @@ const OAuth = () => {
       const auth = getAuth(app);
 
       const response = await signInWithPopup(auth, authProvider)
-      console.log(response)
+    
       const backendResponse = await axios.post(`${import.meta.env.VITE_BASE_URL}api/easy-estates/user/google-auth`,
         { name: response.user.displayName, email: response.user.email, image: response.user.photoURL },
         {
@@ -27,15 +27,13 @@ const OAuth = () => {
           },
         });
 
-      console.log(backendResponse?.data?.data)
-      console.log(backendResponse.data)
-
       dispatch(loginSuccess(backendResponse.data.data));
       navigate('/')
 
 
     } catch (error) {
-      console.log('Google auth failed ', error)
+      throw new Error(error.message)
+      
     }
   }
 

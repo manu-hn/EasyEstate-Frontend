@@ -64,7 +64,7 @@ const Form = () => {
     const formik = useFormik({
         initialValues,
         onSubmit: (values) => {
-            console.log(values)
+           
         },
         validate
     });

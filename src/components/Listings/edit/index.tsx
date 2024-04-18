@@ -202,7 +202,7 @@ const EditListing = () => {
 
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      throw new Error(error.message);
     }
   }
   return (
