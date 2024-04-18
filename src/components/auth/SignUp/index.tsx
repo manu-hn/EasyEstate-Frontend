@@ -47,11 +47,11 @@ const SignUp = () => {
     } catch (error) {
       setIsLoading(false)
       setMessage('Something Error Happened!')
-      console.log(error);
+      throw new Error(error.message);
 
     }
   }
-  console.log(signUpData)
+ 
   return (
 
     <div className='p-3 max-w-lg mx-auto flex flex-col items-center '>

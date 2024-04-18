@@ -47,7 +47,7 @@ const Login = () => {
 
     } catch (error) {
       dispatch(loginFailure(error));
-      console.log(error)
+      throw new Error(error.message);
 
     }
   }

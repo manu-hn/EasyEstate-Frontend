@@ -150,7 +150,7 @@ const Form = () => {
       }
 
     } catch (error) {
-      console.log(error)
+      throw new Error(error.message);
     }
   }
 
@@ -224,7 +224,7 @@ const Form = () => {
       setError(false)
       const userRef = currentUser?._id || "";
       const response = await createListingsFromHook({ ...formData, userRef });
-      console.log(response)
+      
       if (!response.error) {
         setLoading(false)
         navigate(`/listing/${response.newListing._id}`);
@@ -233,7 +233,7 @@ const Form = () => {
 
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      throw new Error(error.message);
     }
   }
 

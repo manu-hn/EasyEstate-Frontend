@@ -49,12 +49,13 @@ const Form = () => {
           'Access-Control-Allow-Origin': 'http://localhost:5173',
         }
       })
-      console.log("response profile", response)
+     
       setMessage(response.data.message)
       dispatch(updateUserSuccess(response.data.data))
     } catch (error) {
-      console.log(error)
+      
       dispatch(updateUserFailure(error))
+      throw new Error(error.message);
     }
   }
 

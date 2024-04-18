@@ -53,7 +53,7 @@ const useListings = () => {
             const response = await axios.get(`${import.meta.env.VITE_BASE_URL}api/properties/listings/get-listing/${lid}`);
             return response.data;
         } catch (error) {
-            console.log(error);
+            throw new Error(error.message);
 
         }
     }

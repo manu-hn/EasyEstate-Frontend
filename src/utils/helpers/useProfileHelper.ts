@@ -39,8 +39,8 @@ const useProfileHelper = () => {
             navigate('/sign-up');
 
         } catch (error) {
-            console.log(error);
             dispatch(deleteUserFailure(error));
+            throw new Error(error.message);
         }
 
     }
@@ -72,7 +72,7 @@ const useProfileHelper = () => {
             return response.data;
 
         } catch (error) {
-            console.log(error)
+            throw new Error(error.message);
         }
     }
     return {
