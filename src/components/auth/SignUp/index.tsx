@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SignUpData } from "@/utils/types";
 import axios from "axios";
 import OAuth from '@/components/auth/OAuth.tsx';
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 
 
